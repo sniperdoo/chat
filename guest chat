@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호텔 긴급 고객 지원</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const HotelSupportPage = () => {
+            const [language, setLanguage] = React.useState('ko');
+            const [roomNumber, setRoomNumber] = React.useState('');
+            const [issueType, setIssueType] = React.useState('checkin');
+            const [message, setMessage] = React.useState('');
+            const [ticket, setTicket] = React.useState(null);
+
+            const issueTypes = [
+                { value: 'checkin', icon: 'fas fa-hotel', label: '체크인 문제' },
+                { value: 'key', icon: 'fas fa-key', label: '키 분실' },
+                { value: 'room', icon: 'fas fa-exclamation-triangle', label: '객실 문제' },
+                { value: 'wifi', icon: 'fas fa-wifi', label: 'Wi-Fi 연결' }
+            ];
+
+            const createTicket = () => {
+                if (!roomNumber || !message) {
+                    alert('객실 번호와 메시지를 입력해주세요.');
+                    return;
+                }
+
+                const newTicket = {
+                    id: `TICKET-${Date.now()}`,
+                    roomNumber,
+                    issueType,
+                    language,
+                    message,
+                    status: 'pending',
+                    createdAt: new Date()
+                };
+
+                setTicket(newTicket);
+                // 실제 구현 시 서버에 저장 로직 추가
+                console.log('티켓 생성:', newTicket);
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center">
+                    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                        <h1 className="text-2xl font-bold mb-6 text-center">호텔 긴급 지원</h1>
+                        
+                        {/* 언어 선택 */}
+                        <div className="mb-4">
+                            <select 
+                                value={language} 
+                                onChange={(e) => setLanguage(e.target.value)}
+                                className="w-full p-2 border rounded"
+                            >
+                                <option value="ko">한국어</option>
+                                <option value="en">English</option>
+                                <option value="ja">日本語</option>
+                                <option value="zh">中文</option>
+                            </select>
+                        </div>
+
+                        {/* 객실 번호 입력 */}
+                        <input 
+                            type="text" 
+                            value={roomNumber}
+                            onChange={(e) => setRoomNumber(e.target.value)}
+                            placeholder="객실 번호를 입력해주세요"
+                            className="w-full p-2 border rounded mb-4"
+                        />
+
+                        {/* 문제 유형 선택 */}
+                        <div className="grid grid-cols-4 gap-2 mb-4">
+                            {issueTypes.map((issue) => (
+                                <button
+                                    key={issue.value}
+                                    onClick={() => setIssueType(issue.value)}
+                                    className={`p-2 rounded flex flex-col items-center ${
+                                        issueType === issue.value 
+                                            ? 'bg-blue-500 text-white' 
+                                            : 'bg-gray-200 text-gray-700'
+                                    }`}
+                                >
+                                    <i className={`${issue.icon} mb-1`}></i>
+                                    <span className="text-xs">{issue.label}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* 메시지 입력 */}
+                        <textarea 
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder="문제에 대해 자세히 설명해주세요"
+                            className="w-full p-2 border rounded mb-4 h-32"
+                        ></textarea>
+
+                        {/* 제출 버튼 */}
+                        <button 
+                            onClick={createTicket}
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                        >
+                            지원 요청 전송
+                        </button>
+
+                        {/* 티켓 상태 표시 */}
+                        {ticket && (
+                            <div className="mt-4 p-3 bg-green-100 rounded">
+                                <p>티켓 번호: {ticket.id}</p>
+                                <p>상태: 접수됨</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<HotelSupportPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>

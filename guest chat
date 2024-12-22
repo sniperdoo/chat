@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>호텔 긴급 고객 지원</title>
-    <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6/babel.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body>
     <div id="root"></div>
 
     <script type="text/babel">
@@ -49,81 +49,96 @@
                 console.log('티켓 생성:', newTicket);
             };
 
-            return (
-                <div className="min-h-screen flex items-center justify-center">
-                    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                        <h1 className="text-2xl font-bold mb-6 text-center">호텔 긴급 지원</h1>
-                        
-                        {/* 언어 선택 */}
-                        <div className="mb-4">
-                            <select 
-                                value={language} 
-                                onChange={(e) => setLanguage(e.target.value)}
-                                className="w-full p-2 border rounded"
-                            >
-                                <option value="ko">한국어</option>
-                                <option value="en">English</option>
-                                <option value="ja">日本語</option>
-                                <option value="zh">中文</option>
-                            </select>
-                        </div>
+            return React.createElement(
+                'div', 
+                { className: 'min-h-screen flex items-center justify-center bg-gray-100 p-4' },
+                React.createElement(
+                    'div', 
+                    { className: 'bg-white p-8 rounded-lg shadow-md w-full max-w-md' },
+                    React.createElement('h1', { className: 'text-2xl font-bold mb-6 text-center' }, '호텔 긴급 지원'),
+                    
+                    // 언어 선택
+                    React.createElement(
+                        'div', 
+                        { className: 'mb-4' },
+                        React.createElement(
+                            'select', 
+                            { 
+                                value: language, 
+                                onChange: (e) => setLanguage(e.target.value),
+                                className: 'w-full p-2 border rounded'
+                            },
+                            React.createElement('option', { value: 'ko' }, '한국어'),
+                            React.createElement('option', { value: 'en' }, 'English'),
+                            React.createElement('option', { value: 'ja' }, '日本語'),
+                            React.createElement('option', { value: 'zh' }, '中文')
+                        )
+                    ),
 
-                        {/* 객실 번호 입력 */}
-                        <input 
-                            type="text" 
-                            value={roomNumber}
-                            onChange={(e) => setRoomNumber(e.target.value)}
-                            placeholder="객실 번호를 입력해주세요"
-                            className="w-full p-2 border rounded mb-4"
-                        />
+                    // 객실 번호 입력
+                    React.createElement('input', {
+                        type: 'text',
+                        value: roomNumber,
+                        onChange: (e) => setRoomNumber(e.target.value),
+                        placeholder: '객실 번호를 입력해주세요',
+                        className: 'w-full p-2 border rounded mb-4'
+                    }),
 
-                        {/* 문제 유형 선택 */}
-                        <div className="grid grid-cols-4 gap-2 mb-4">
-                            {issueTypes.map((issue) => (
-                                <button
-                                    key={issue.value}
-                                    onClick={() => setIssueType(issue.value)}
-                                    className={`p-2 rounded flex flex-col items-center ${
+                    // 문제 유형 선택
+                    React.createElement(
+                        'div', 
+                        { className: 'grid grid-cols-4 gap-2 mb-4' },
+                        issueTypes.map((issue) => 
+                            React.createElement(
+                                'button',
+                                {
+                                    key: issue.value,
+                                    onClick: () => setIssueType(issue.value),
+                                    className: `p-2 rounded flex flex-col items-center ${
                                         issueType === issue.value 
                                             ? 'bg-blue-500 text-white' 
                                             : 'bg-gray-200 text-gray-700'
-                                    }`}
-                                >
-                                    <i className={`${issue.icon} mb-1`}></i>
-                                    <span className="text-xs">{issue.label}</span>
-                                </button>
-                            ))}
-                        </div>
+                                    }`
+                                },
+                                React.createElement('i', { className: `${issue.icon} mb-1` }),
+                                React.createElement('span', { className: 'text-xs' }, issue.label)
+                            )
+                        )
+                    ),
 
-                        {/* 메시지 입력 */}
-                        <textarea 
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="문제에 대해 자세히 설명해주세요"
-                            className="w-full p-2 border rounded mb-4 h-32"
-                        ></textarea>
+                    // 메시지 입력
+                    React.createElement('textarea', {
+                        value: message,
+                        onChange: (e) => setMessage(e.target.value),
+                        placeholder: '문제에 대해 자세히 설명해주세요',
+                        className: 'w-full p-2 border rounded mb-4 h-32'
+                    }),
 
-                        {/* 제출 버튼 */}
-                        <button 
-                            onClick={createTicket}
-                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                        >
-                            지원 요청 전송
-                        </button>
+                    // 제출 버튼
+                    React.createElement(
+                        'button', 
+                        {
+                            onClick: createTicket,
+                            className: 'w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700'
+                        }, 
+                        '지원 요청 전송'
+                    ),
 
-                        {/* 티켓 상태 표시 */}
-                        {ticket && (
-                            <div className="mt-4 p-3 bg-green-100 rounded">
-                                <p>티켓 번호: {ticket.id}</p>
-                                <p>상태: 접수됨</p>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                    // 티켓 상태 표시
+                    ticket && React.createElement(
+                        'div', 
+                        { className: 'mt-4 p-3 bg-green-100 rounded' },
+                        React.createElement('p', null, `티켓 번호: ${ticket.id}`),
+                        React.createElement('p', null, '상태: 접수됨')
+                    )
+                )
             );
         };
 
-        ReactDOM.render(<HotelSupportPage />, document.getElementById('root'));
+        ReactDOM.render(
+            React.createElement(HotelSupportPage), 
+            document.getElementById('root')
+        );
     </script>
 </body>
 </html>
